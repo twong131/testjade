@@ -1,38 +1,313 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Page Title Here</title>
-    <link rel="stylesheet" href="styles.css"> <!-- Add your CSS file here, if applicable -->
+    <title>Commission Links</title>
+    <style>
+        .active-date {
+            color: green;
+        }
+
+        .expired-date {
+            color: red;
+        }
+
+        .today-date {
+            color: blue;
+        }
+
+        /* Style for subject headers */
+        .subject-header {
+            font-weight: bold;
+        }
+
+        /* Style for table headers */
+        .table-header {
+            background-color: #f2f2f2;
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <h1>Your Website Header</h1>
-        <nav>
-            <ul>
-                <li><a href="#">Home</a></li>
-                <li><a href="#">About</a></li>
-                <li><a href="#">Services</a></li>
-                <li><a href="#">Contact</a></li>
-            </ul>
-        </nav>
-    </header>
+    <h1>Commission Links</h1>
 
-    <main>
-        <section>
-            <h2>Section 1</h2>
-            <p>This is the content of section 1.</p>
-        </section>
+    <!-- Subject: General -->
+    <h2 class="subject-header">General</h2>
+    <table>
+        <thead>
+            <tr class="table-header">
+                <th></th>
+                <th>Link name</th>
+                <th>Post Date</th>
+                <th>Expiry Date</th>
+                <th>Status</th>
+                <th>Edit Dates</th>
+            </tr>
+        </thead>
+        <tbody id="general-link-list">
+            <!-- Links will be dynamically loaded here -->
+        </tbody>
+    </table>
 
-        <section>
-            <h2>Section 2</h2>
-            <p>This is the content of section 2.</p>
-        </section>
-    </main>
+    <!-- Subject: SOTO -->
+    <h2 class="subject-header">SOTO</h2>
+    <table>
+        <thead>
+            <tr class="table-header">
+                <th></th>
+                <th>Link name</th>
+                <th>Post Date</th>
+                <th>Expiry Date</th>
+                <th>Status</th>
+                <th>Edit Dates</th>
+            </tr>
+        </thead>
+        <tbody id="soto-link-list">
+            <!-- Links will be dynamically loaded here -->
+        </tbody>
+    </table>
 
-    <footer>
-        <p>&copy; 2023 Your Website Name</p>
-    </footer>
+    <!-- Subject: Asia Commission -->
+    <h2 class="subject-header">Asia Commission</h2>
+    <table>
+        <thead>
+            <tr class="table-header">
+                <th></th>
+                <th>Link name</th>
+                <th>Post Date</th>
+                <th>Expiry Date</th>
+                <th>Status</th>
+                <th>Edit Dates</th>
+            </tr>
+        </thead>
+        <tbody id="asia-commission-link-list">
+            <!-- Links will be dynamically loaded here -->
+        </tbody>
+    </table>
+
+    <!-- Add Link Form -->
+    <h2>Add New Link</h2>
+    <form id="add-link-form">
+        <label for="subject-select">Select Subject:</label>
+        <select id="subject-select">
+            <option value="general">General</option>
+            <option value="soto">SOTO</option>
+            <option value="asia-commission">Asia Commission</option>
+        </select><br>
+        <label for="link-name">Link Name:</label>
+        <input type="text" id="link-name" required><br>
+        <label for="link-url">Link URL:</label>
+        <input type="text" id="link-url" required><br>
+        <label for="post-date">Post Date:</label>
+        <input type="date" id="post-date" required><br>
+        <label for="expiry-date">Expiry Date:</label>
+        <input type="date" id="expiry-date" required><br>
+        <button type="submit">Add Link</button>
+    </form>
+
+    <!-- Edit Date Form -->
+    <div id="edit-date-form" style="display: none;">
+        <h2>Edit Dates</h2>
+        <form id="edit-link-date-form">
+            <label for="edit-post-date">Post Date:</label>
+            <input type="date" id="edit-post-date" required><br>
+            <label for="edit-expiry-date">Expiry Date:</label>
+            <input type="date" id="edit-expiry-date" required><br>
+            <button type="submit">Save</button>
+            <button type="button" id="cancel-edit-button">Cancel</button>
+        </form>
+    </div>
+
+    <button id="delete-button">Delete</button> <!-- Delete button -->
+
+    <script>
+        let editingLink = null;
+
+        // Function to update link statuses based on issuance and expiry dates
+        function updateLinkStatuses() {
+            const today = new Date();
+            const issuanceDates = document.querySelectorAll('.issuance-date');
+            const expiryDates = document.querySelectorAll('.expiry-date');
+            issuanceDates.forEach((issuanceDate, index) => {
+                const listItem = issuanceDate.closest('tr');
+                if (listItem) {
+                    const linkStatus = listItem.querySelector('.link-status');
+                    if (linkStatus) {
+                        const issuanceDateValue = new Date(issuanceDate.textContent);
+                        const expiryDateValue = new Date(expiryDates[index].textContent);
+
+                        // Check if the expiry date is today, in the future, or in the past
+                        if (expiryDateValue.toDateString() === today.toDateString()) {
+                            linkStatus.textContent = "Expires Today";
+                            linkStatus.classList.add("today-date");
+                        } else if (expiryDateValue < today) {
+                            linkStatus.textContent = "Expired";
+                            linkStatus.classList.add("expired-date");
+                        } else if (expiryDateValue > today) {
+                            linkStatus.textContent = "Active";
+                            linkStatus.classList.add("active-date");
+                        }
+                    }
+                }
+            });
+        }
+
+        // Load links from localStorage
+        function loadLinks() {
+            const linkLists = document.querySelectorAll('tbody');
+            linkLists.forEach(linkList => {
+                const subjectKey = linkList.id;
+                const links = JSON.parse(localStorage.getItem(subjectKey)) || [];
+
+                links.forEach(link => {
+                    const newTableRow = document.createElement("tr");
+                    newTableRow.innerHTML = `
+                        <td><input type="checkbox" class="link-checkbox"></td>
+                        <td><a href="${link.url}" target="_blank">${link.name}</a></td>
+                        <td class="issuance-date">${link.postDate}</td>
+                        <td class="expiry-date">${link.expiryDate}</td>
+                        <td class="link-status"></td>
+                        <td><button class="edit-button">Edit</button></td>
+                    `;
+
+                    linkList.appendChild(newTableRow);
+                });
+            });
+
+            // Update link statuses
+            updateLinkStatuses();
+        }
+
+        // Update link statuses initially and load saved links
+        updateLinkStatuses();
+        loadLinks();
+
+        // Save links to localStorage
+        function saveLinks() {
+            const linkLists = document.querySelectorAll('tbody');
+            linkLists.forEach(linkList => {
+                const subjectKey = linkList.id;
+                const links = [];
+
+                const rows = linkList.querySelectorAll('tr');
+                rows.forEach(row => {
+                    const link = {
+                        name: row.querySelector('a').textContent,
+                        url: row.querySelector('a').href,
+                        postDate: row.querySelector('.issuance-date').textContent,
+                        expiryDate: row.querySelector('.expiry-date').textContent,
+                    };
+
+                    links.push(link);
+                });
+
+                localStorage.setItem(subjectKey, JSON.stringify(links));
+            });
+        }
+
+        // Add New Link Form Submission
+        document.getElementById("add-link-form").addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            const selectedSubject = document.getElementById("subject-select").value;
+            const linkName = document.getElementById("link-name").value;
+            const linkUrl = document.getElementById("link-url").value;
+            const postDate = document.getElementById("post-date").value;
+            const expiryDate = document.getElementById("expiry-date").value;
+
+            // Create a new table row for the link
+            const linkList = document.getElementById(selectedSubject + "-link-list");
+            const newTableRow = document.createElement("tr");
+            newTableRow.innerHTML = `
+                <td><input type="checkbox" class="link-checkbox"></td>
+                <td><a href="${linkUrl}" target="_blank">${linkName}</a></td>
+                <td class="issuance-date">${postDate}</td>
+                <td class="expiry-date">${expiryDate}</td>
+                <td class="link-status"></td>
+                <td><button class="edit-button">Edit</button></td>
+            `;
+            linkList.appendChild(newTableRow);
+
+            // Reset the form
+            document.getElementById("add-link-form").reset();
+
+            // Update link statuses
+            updateLinkStatuses();
+
+            // Attach the edit event listener to the newly added edit button
+            const editButton = newTableRow.querySelector('.edit-button');
+            editButton.addEventListener("click", function () {
+                const postDateCell = newTableRow.querySelector('.issuance-date');
+                const expiryDateCell = newTableRow.querySelector('.expiry-date');
+                const postDateValue = postDateCell.textContent;
+                const expiryDateValue = expiryDateCell.textContent;
+
+                // Populate the edit date form with current dates
+                document.getElementById("edit-post-date").value = postDateValue;
+                document.getElementById("edit-expiry-date").value = expiryDateValue;
+
+                // Show the edit date form
+                document.getElementById("edit-date-form").style.display = "block";
+
+                // Set the editing link
+                editingLink = newTableRow;
+            });
+
+            // Save links to localStorage
+            saveLinks();
+        });
+
+        // Edit Date Form Submission
+        document.getElementById("edit-link-date-form").addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            if (editingLink) {
+                const postDateInput = document.getElementById("edit-post-date");
+                const expiryDateInput = document.getElementById("edit-expiry-date");
+
+                // Update the post and expiry dates in the table
+                editingLink.querySelector('.issuance-date').textContent = postDateInput.value;
+                editingLink.querySelector('.expiry-date').textContent = expiryDateInput.value;
+
+                // Hide the edit date form
+                document.getElementById("edit-date-form").style.display = "none";
+
+                // Clear the editing link
+                editingLink = null;
+
+                // Update link statuses
+                updateLinkStatuses();
+
+                // Save links to localStorage
+                saveLinks();
+            }
+        });
+
+        // Cancel Edit Button Click Event
+        document.getElementById("cancel-edit-button").addEventListener("click", function () {
+            // Hide the edit date form
+            document.getElementById("edit-date-form").style.display = "none";
+
+            // Clear the editing link
+            editingLink = null;
+        });
+
+        // Delete Button Click Event
+        document.getElementById("delete-button").addEventListener("click", function () {
+            const checkboxes = document.querySelectorAll('.link-checkbox:checked');
+
+            // Remove the selected links from the display
+            checkboxes.forEach(checkbox => {
+                const listItem = checkbox.closest('tr');
+                if (listItem) {
+                    listItem.remove();
+                }
+            });
+
+            // After deletion, update link statuses
+            updateLinkStatuses();
+
+            // Save links to localStorage
+            saveLinks();
+        });
+    </script>
 </body>
 </html>
