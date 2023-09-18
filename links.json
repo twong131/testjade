@@ -1,4 +1,5 @@
-[
+{
+  "general": [
     {
       "name": "Link 1",
       "url": "https://example.com/link1",
@@ -8,8 +9,24 @@
     {
       "name": "Link 2",
       "url": "https://example.com/link2",
-      "postDate": "2023-09-10",
-      "expiryDate": "2023-09-15"
+      "postDate": "2023-09-15",
+      "expiryDate": "2023-09-20"
+    }
+  ],
+  "soto": [
+    {
+      "name": "SOTO Link 1",
+      "url": "https://example.com/soto/link1",
+      "postDate": "2023-09-18",
+      "expiryDate": "2023-09-22"
+    }
+  ],
+  "asia-commission": [
+    {
+      "name": "Asia Commission Link 1",
+      "url": "https://example.com/asia-commission/link1",
+      "postDate": "2023-09-14",
+      "expiryDate": "2023-09-16"
     }
   ]
-  
+}
