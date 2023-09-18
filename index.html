@@ -3,6 +3,43 @@
 <head>
     <title>Commission Links</title>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            background-color: #333;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h2.subject-header {
+            background-color: #555;
+            color: white;
+            padding: 10px;
+            margin-top: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+
         .active-date {
             color: green;
         }
@@ -15,14 +52,37 @@
             color: blue;
         }
 
-        /* Style for subject headers */
-        .subject-header {
-            font-weight: bold;
+        /* Style for Add Link Form */
+        #add-link-form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+            margin-top: 20px;
         }
 
-        /* Style for table headers */
-        .table-header {
-            background-color: #f2f2f2;
+        /* Style for Edit Date Form */
+        #edit-date-form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+            margin-top: 20px;
+            display: none;
+        }
+
+        /* Style for buttons */
+        button {
+            background-color: #333;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #555;
         }
     </style>
 </head>
@@ -33,9 +93,9 @@
     <h2 class="subject-header">General</h2>
     <table>
         <thead>
-            <tr class="table-header">
+            <tr>
                 <th></th>
-                <th>Link name</th>
+                <th>Link Name</th>
                 <th>Post Date</th>
                 <th>Expiry Date</th>
                 <th>Status</th>
@@ -51,9 +111,9 @@
     <h2 class="subject-header">SOTO</h2>
     <table>
         <thead>
-            <tr class="table-header">
+            <tr>
                 <th></th>
-                <th>Link name</th>
+                <th>Link Name</th>
                 <th>Post Date</th>
                 <th>Expiry Date</th>
                 <th>Status</th>
@@ -69,9 +129,9 @@
     <h2 class="subject-header">Asia Commission</h2>
     <table>
         <thead>
-            <tr class="table-header">
+            <tr>
                 <th></th>
-                <th>Link name</th>
+                <th>Link Name</th>
                 <th>Post Date</th>
                 <th>Expiry Date</th>
                 <th>Status</th>
@@ -84,27 +144,29 @@
     </table>
 
     <!-- Add Link Form -->
-    <h2>Add New Link</h2>
-    <form id="add-link-form">
-        <label for="subject-select">Select Subject:</label>
-        <select id="subject-select">
-            <option value="general">General</option>
-            <option value="soto">SOTO</option>
-            <option value="asia-commission">Asia Commission</option>
-        </select><br>
-        <label for="link-name">Link Name:</label>
-        <input type="text" id="link-name" required><br>
-        <label for="link-url">Link URL:</label>
-        <input type="text" id="link-url" required><br>
-        <label for="post-date">Post Date:</label>
-        <input type="date" id="post-date" required><br>
-        <label for="expiry-date">Expiry Date:</label>
-        <input type="date" id="expiry-date" required><br>
-        <button type="submit">Add Link</button>
-    </form>
+    <div id="add-link-form">
+        <h2>Add New Link</h2>
+        <form>
+            <label for="subject-select">Select Subject:</label>
+            <select id="subject-select">
+                <option value="general">General</option>
+                <option value="soto">SOTO</option>
+                <option value="asia-commission">Asia Commission</option>
+            </select><br>
+            <label for="link-name">Link Name:</label>
+            <input type="text" id="link-name" required><br>
+            <label for="link-url">Link URL:</label>
+            <input type="text" id="link-url" required><br>
+            <label for="post-date">Post Date:</label>
+            <input type="date" id="post-date" required><br>
+            <label for="expiry-date">Expiry Date:</label>
+            <input type="date" id="expiry-date" required><br>
+            <button type="submit">Add Link</button>
+        </form>
+    </div>
 
     <!-- Edit Date Form -->
-    <div id="edit-date-form" style="display: none;">
+    <div id="edit-date-form">
         <h2>Edit Dates</h2>
         <form id="edit-link-date-form">
             <label for="edit-post-date">Post Date:</label>
