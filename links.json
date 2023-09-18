@@ -1,32 +1,48 @@
-{
-  "general": [
-    {
-      "name": "Link 1",
-      "url": "https://example.com/link1",
-      "postDate": "2023-09-19",
-      "expiryDate": "2023-09-21"
-    },
-    {
-      "name": "Link 2",
-      "url": "https://example.com/link2",
-      "postDate": "2023-09-15",
-      "expiryDate": "2023-09-20"
-    }
-  ],
-  "soto": [
-    {
-      "name": "SOTO Link 1",
-      "url": "https://example.com/soto/link1",
-      "postDate": "2023-09-18",
-      "expiryDate": "2023-09-22"
-    }
-  ],
-  "asia-commission": [
-    {
-      "name": "Asia Commission Link 1",
-      "url": "https://example.com/asia-commission/link1",
-      "postDate": "2023-09-14",
-      "expiryDate": "2023-09-16"
-    }
-  ]
-}
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- ... Your HTML head content ... -->
+</head>
+<body>
+    <!-- ... Your HTML body content ... -->
+
+    <script>
+        // Load links from the JSON file
+        fetch('links.json')
+            .then(response => response.json())
+            .then(data => {
+                // Use 'data' to populate your links on the page
+                // ...
+            })
+            .catch(error => console.error('Error loading links:', error));
+
+        // Function to save links to the JSON file
+        function saveLinksToJSON(links) {
+            fetch('links.json', {
+                method: 'PUT', // Use 'PUT' to update the file
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(links),
+            })
+            .then(response => {
+                if (response.ok) {
+                    console.log('Links saved successfully.');
+                } else {
+                    console.error('Error saving links:', response.statusText);
+                }
+            })
+            .catch(error => console.error('Error saving links:', error));
+        }
+
+        // JavaScript code for adding links
+        // ...
+
+        // JavaScript code for editing links
+        // ...
+
+        // JavaScript code for deleting links
+        // ...
+    </script>
+</body>
+</html>
