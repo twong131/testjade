@@ -1,0 +1,15 @@
+[
+    {
+      "name": "Link 1",
+      "url": "https://example.com/link1",
+      "postDate": "2023-09-19",
+      "expiryDate": "2023-09-21"
+    },
+    {
+      "name": "Link 2",
+      "url": "https://example.com/link2",
+      "postDate": "2023-09-10",
+      "expiryDate": "2023-09-15"
+    }
+  ]
+  
